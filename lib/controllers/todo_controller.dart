@@ -2,21 +2,25 @@ import 'package:hive/hive.dart';
 import 'package:local_storage_hive/models/todo.dart';
 
 class TodoController {
-    final Box<Todo> todoBox = Hive.box<Todo>('todos'); //samin kayak main
+  final Box<Todo> todoBox = Hive.box<Todo>('todos');
 
-    //create
-    Future<void> addTodo(Todo todo) async {
-        await todoBox.add(todo);
-    }
+  // CREATE
+  Future<void> addTodo(Todo todo) async {
+    await todoBox.add(todo);
+  }
 
-    //read
-    List<Todo> getTodos() {
-        return todoBox.values.toList();
-    }
+  // READ
+  List<Todo> getTodos() {
+    return todoBox.values.toList();
+  }
 
-    //update
+  // UPDATE
+  Future<void> updateTodo(int index, Todo updatedTodo) async {
+    await todoBox.putAt(index, updatedTodo);
+  }
 
-    //delete
-
-    
+  // DELETE
+  Future<void> deleteTodo(int index) async {
+    await todoBox.deleteAt(index);
+  }
 }
