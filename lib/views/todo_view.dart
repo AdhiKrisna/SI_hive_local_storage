@@ -21,7 +21,7 @@ class _TodoViewState extends State<TodoView> {
     _loadTodos();
   }
 
-  void _loadTodos() {
+  Future<void> _loadTodos() async {
     setState(() {
       todos = controller.getTodos();
     });
@@ -80,35 +80,38 @@ class _TodoViewState extends State<TodoView> {
       ),
       body: todos.isEmpty
           ? const Center(child: Text('Belum ada todo'))
-          : ListView.builder(
-              itemCount: todos.length,
-              itemBuilder: (context, index) {
-                final todo = todos[index];
-                return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: ListTile(
-                    leading: const Icon(Icons.check_circle_outline),
-                    title: Text(todo.title),
-                    subtitle: Text(todo.description),
-                    trailing: Wrap(
-                      spacing: 8,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () =>
-                              _navigateToEditPage(index, todo),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _deleteTodoConfirm(index),
-                        ),
-                      ],
+          : RefreshIndicator(
+            onRefresh: () => _loadTodos(),
+            child: ListView.builder(
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
+                  final todo = todos[index];
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: ListTile(
+                      leading: const Icon(Icons.check_circle_outline),
+                      title: Text(todo.title),
+                      subtitle: Text(todo.description),
+                      trailing: Wrap(
+                        spacing: 8,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () =>
+                                _navigateToEditPage(index, todo),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteTodoConfirm(index),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+          ),
     );
   }
 }
