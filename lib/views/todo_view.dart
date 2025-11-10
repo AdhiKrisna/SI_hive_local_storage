@@ -28,25 +28,19 @@ class _TodoViewState extends State<TodoView> {
   }
 
   Future<void> _navigateToAddPage() async {
-    final newTodo = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const AddTodoPage()),
     );
-    if (newTodo != null) {
-      await controller.addTodo(newTodo);
-      _loadTodos();
-    }
+    _loadTodos();
   }
 
   Future<void> _navigateToEditPage(int index, Todo todo) async {
-    final updatedTodo = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => EditTodoPage(index: index, todo: todo)),
     );
-    if (updatedTodo != null) {
-      await controller.updateTodo(index, updatedTodo);
-      _loadTodos();
-    }
+    _loadTodos();
   }
 
   Future<void> _deleteTodoConfirm(int index) async {
