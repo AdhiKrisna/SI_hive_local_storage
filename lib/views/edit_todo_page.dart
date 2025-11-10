@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:local_storage_hive/controllers/todo_controller.dart';
 import 'package:local_storage_hive/models/todo.dart';
 
 class EditTodoPage extends StatefulWidget {
+  final int index;
   final Todo todo;
 
-  const EditTodoPage({super.key, required this.todo});
+  const EditTodoPage({
+    super.key,
+    required this.todo,
+    required this.index,
+  });
 
   @override
   State<EditTodoPage> createState() => _EditTodoPageState();
@@ -13,6 +19,7 @@ class EditTodoPage extends StatefulWidget {
 class _EditTodoPageState extends State<EditTodoPage> {
   late TextEditingController _titleController;
   late TextEditingController _descController;
+  final TodoController _controller = TodoController();
 
   @override
   void initState() {
@@ -21,7 +28,7 @@ class _EditTodoPageState extends State<EditTodoPage> {
     _descController = TextEditingController(text: widget.todo.description);
   }
 
-  void _updateTodo() {
+  Future<void> _updateTodo() async {
     final title = _titleController.text.trim();
     final desc = _descController.text.trim();
 
@@ -36,7 +43,16 @@ class _EditTodoPageState extends State<EditTodoPage> {
     }
 
     final updatedTodo = Todo(title: title, description: desc);
-    Navigator.pop(context, updatedTodo);
+    await _controller.updateTodo(widget.index, updatedTodo);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Todo berhasil diperbarui!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+    Navigator.pop(context, true);
   }
 
   @override

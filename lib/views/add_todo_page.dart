@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_storage_hive/controllers/todo_controller.dart';
 import 'package:local_storage_hive/models/todo.dart';
 
 class AddTodoPage extends StatefulWidget {
@@ -11,8 +12,9 @@ class AddTodoPage extends StatefulWidget {
 class _AddTodoPageState extends State<AddTodoPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final TodoController _controller = TodoController();
 
-  void _saveTodo() {
+  Future<void> _saveTodo() async {
     final title = _titleController.text.trim();
     final desc = _descController.text.trim();
 
@@ -27,7 +29,16 @@ class _AddTodoPageState extends State<AddTodoPage> {
     }
 
     final newTodo = Todo(title: title, description: desc);
-    Navigator.pop(context, newTodo);
+    await _controller.addTodo(newTodo);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Todo berhasil ditambahkan!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+    Navigator.pop(context, true);
   }
 
   @override

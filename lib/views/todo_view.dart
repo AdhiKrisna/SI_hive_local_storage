@@ -41,7 +41,7 @@ class _TodoViewState extends State<TodoView> {
   Future<void> _navigateToEditPage(int index, Todo todo) async {
     final updatedTodo = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => EditTodoPage(todo: todo)),
+      MaterialPageRoute(builder: (_) => EditTodoPage(index: index, todo: todo)),
     );
     if (updatedTodo != null) {
       await controller.updateTodo(index, updatedTodo);
